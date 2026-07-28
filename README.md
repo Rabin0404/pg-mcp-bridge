@@ -1,6 +1,6 @@
 # pg-mcp-bridge
 
-PostgreSQL access for **Cursor MCP** when your database host only allows **PHP/Apache** (Navicat-style HTTP tunnel).
+PostgreSQL access for **Cursor MCP** when your database host only allows **PHP/Apache** (HTTP JSON tunnel).
 
 | Part | Where it runs | Get it |
 |------|----------------|--------|

@@ -18,7 +18,7 @@ return [
     // Access level for the query action:
     //   readonly  - SELECT / WITH...SELECT / EXPLAIN / SHOW
     //   readwrite - + INSERT / UPDATE / DELETE (no DDL)
-    //   full      - + CREATE / ALTER / DROP / TRUNCATE / etc. (Navicat-like)
+    //   full      - + CREATE / ALTER / DROP / TRUNCATE / etc.
     'access_mode' => 'full',
 
     // Safety limits

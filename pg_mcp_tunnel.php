@@ -1,12 +1,12 @@
 <?php
 /**
- * PostgreSQL MCP HTTP tunnel (Navicat-style, JSON API).
+ * PostgreSQL MCP HTTP tunnel (JSON API).
  * Upload this file + config.php to your PHP/Apache host.
  *
  * access_mode in config.php:
  *   - readonly  : SELECT / WITH...SELECT / EXPLAIN / SHOW
  *   - readwrite : + INSERT / UPDATE / DELETE (no DDL)
- *   - full      : + CREATE / ALTER / DROP / TRUNCATE / etc. (Navicat-like)
+ *   - full      : + CREATE / ALTER / DROP / TRUNCATE / etc.
  */
 
 header('Content-Type: application/json; charset=utf-8');
