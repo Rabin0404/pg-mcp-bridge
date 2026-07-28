@@ -5,10 +5,10 @@ PostgreSQL access for **Cursor MCP** when your database host only allows **PHP/A
 | Part | Where it runs | Get it |
 |------|----------------|--------|
 | **PHP tunnel** | Your PHP server | This repo — download and upload to Apache |
-| **MCP bridge** (`pg-mcp-bridge`) | Your PC (Cursor) | [npm](https://www.npmjs.com/package/pg-mcp-bridge) · [source](https://github.com/Rabin0404/pg-mcp-server) |
+| **MCP bridge** (`pg-mcp-bridge`) | Your PC (Cursor / Claude Code) | [npm](https://www.npmjs.com/package/pg-mcp-bridge) · [source](https://github.com/Rabin0404/pg-mcp-server) |
 
 ```text
-Cursor  →  npx pg-mcp-bridge  →  HTTPS  →  PHP tunnel  →  PostgreSQL
+Cursor / Claude Code  →  npx pg-mcp-bridge  →  HTTPS  →  PHP tunnel  →  PostgreSQL
 ```
 
 ## 1. Upload PHP tunnel (this repo)
@@ -53,7 +53,11 @@ curl -s -X POST "https://your-domain.com/pg_mcp_tunnel.php" \
 | `readwrite` | + INSERT / UPDATE / DELETE |
 | `full` | + CREATE / ALTER / DROP / etc. |
 
-## 2. Cursor MCP (npm package)
+## 2. MCP client (npm package)
+
+Works with **Cursor** and **Claude Code** (same stdio MCP bridge).
+
+### Cursor
 
 ```json
 {
@@ -70,8 +74,18 @@ curl -s -X POST "https://your-domain.com/pg_mcp_tunnel.php" \
 }
 ```
 
-Bridge source: [github.com/Rabin0404/pg-mcp-server](https://github.com/Rabin0404/pg-mcp-server)  
-PHP tunnel source: this repo.
+### Claude Code
+
+Project file `.mcp.json` (same JSON shape as above), or:
+
+```bash
+claude mcp add --transport stdio remote-postgres \
+  --env PG_MCP_TUNNEL_URL=https://your-domain.com/pg_mcp_tunnel.php \
+  --env PG_MCP_TOKEN=your-bearer-token \
+  -- npx -y pg-mcp-bridge
+```
+
+See [pg-mcp-server](https://github.com/Rabin0404/pg-mcp-server) for full Claude Code notes.
 
 ## Security
 
