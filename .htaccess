@@ -1,0 +1,7 @@
+# Deny web access to local config if this directory is the document root
+<Files "config.php">
+  Require all denied
+</Files>
+<Files "config.example.php">
+  Require all denied
+</Files>
