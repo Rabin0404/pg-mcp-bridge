@@ -1,25 +1,28 @@
-# PHP PostgreSQL MCP tunnel
+# pg-mcp-bridge
 
-HTTP JSON tunnel for Cursor MCP when the host is **PHP/Apache only** (Navicat-style).
+PostgreSQL access for **Cursor MCP** when your database host only allows **PHP/Apache** (Navicat-style HTTP tunnel).
 
-Upload these files to your PHP host, then connect Cursor via the local `pg-mcp-bridge` Node package (separate from this PHP deploy).
+| Part | Where it runs | Get it |
+|------|----------------|--------|
+| **PHP tunnel** | Your PHP server | This repo — download and upload to Apache |
+| **MCP bridge** (`pg-mcp-bridge`) | Your PC (Cursor) | [npm: pg-mcp-bridge](https://www.npmjs.com/package/pg-mcp-bridge) |
 
-## Files
+```text
+Cursor  →  npx pg-mcp-bridge  →  HTTPS  →  PHP tunnel  →  PostgreSQL
+```
 
-| File | Purpose |
-|------|---------|
-| `pg_mcp_tunnel.php` | Tunnel endpoint |
-| `config.example.php` | Copy to `config.php` and fill in real values |
-| `.htaccess` | Blocks web access to `config.php` (Apache) |
+## 1. Upload PHP tunnel (this repo)
 
-**Never commit `config.php`** — it contains DB password and API token.
+Download from **https://github.com/Rabin0404/pg-mcp-bridge** and upload to your PHP host:
 
-## Deploy
+- [`pg_mcp_tunnel.php`](pg_mcp_tunnel.php)
+- [`config.example.php`](config.example.php) → copy to `config.php` (do not commit real `config.php`)
+- [`.htaccess`](.htaccess) (optional)
 
-1. Copy `pg_mcp_tunnel.php`, `config.example.php`, and `.htaccess` to a web path, e.g. `https://your-domain.com/rb-mcp/`.
-2. Copy `config.example.php` → `config.php` on the server and edit:
+Requirements: PHP with **pgsql** extension, HTTPS recommended.
 
 ```php
+// config.php
 return [
     'token' => 'generate-a-long-random-secret',
     'host' => '127.0.0.1',
@@ -33,17 +36,16 @@ return [
 ];
 ```
 
-3. Ensure PHP `pgsql` extension is enabled.
-4. Test:
+Test:
 
 ```bash
-curl -s -X POST "https://your-domain.com/rb-mcp/pg_mcp_tunnel.php" \
+curl -s -X POST "https://your-domain.com/pg_mcp_tunnel.php" \
   -H "Authorization: Bearer your-token" \
   -H "Content-Type: application/json" \
   -d '{"action":"ping"}'
 ```
 
-## Access modes
+### Access modes
 
 | Mode | Allowed SQL |
 |------|-------------|
@@ -51,13 +53,32 @@ curl -s -X POST "https://your-domain.com/rb-mcp/pg_mcp_tunnel.php" \
 | `readwrite` | + INSERT / UPDATE / DELETE |
 | `full` | + CREATE / ALTER / DROP / etc. |
 
-## Actions
+## 2. Cursor MCP (npm package)
 
-`ping`, `list_schemas`, `list_tables`, `describe_table`, `query`
+```json
+{
+  "mcpServers": {
+    "remote-postgres": {
+      "command": "npx",
+      "args": ["-y", "pg-mcp-bridge"],
+      "env": {
+        "PG_MCP_TUNNEL_URL": "https://your-domain.com/pg_mcp_tunnel.php",
+        "PG_MCP_TOKEN": "your-bearer-token"
+      }
+    }
+  }
+}
+```
+
+Bridge source lives in [`mcp-server/`](mcp-server/).
 
 ## Security
 
+- Never publish real `config.php`
 - Bearer token required
-- DB credentials stay in server `config.php` only
 - Prefer HTTPS
 - One SQL statement per request
+
+## License
+
+MIT
