@@ -5,7 +5,7 @@ PostgreSQL access for **Cursor MCP** when your database host only allows **PHP/A
 | Part | Where it runs | Get it |
 |------|----------------|--------|
 | **PHP tunnel** | Your PHP server | This repo — download and upload to Apache |
-| **MCP bridge** (`pg-mcp-bridge`) | Your PC (Cursor) | [npm: pg-mcp-bridge](https://www.npmjs.com/package/pg-mcp-bridge) |
+| **MCP bridge** (`pg-mcp-bridge`) | Your PC (Cursor) | [npm](https://www.npmjs.com/package/pg-mcp-bridge) · [source](https://github.com/Rabin0404/pg-mcp-server) |
 
 ```text
 Cursor  →  npx pg-mcp-bridge  →  HTTPS  →  PHP tunnel  →  PostgreSQL
@@ -70,7 +70,8 @@ curl -s -X POST "https://your-domain.com/pg_mcp_tunnel.php" \
 }
 ```
 
-Bridge source lives in [`mcp-server/`](mcp-server/).
+Bridge source: [github.com/Rabin0404/pg-mcp-server](https://github.com/Rabin0404/pg-mcp-server)  
+PHP tunnel source: this repo.
 
 ## Security
 
